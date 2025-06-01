@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Art Generator</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>AI Art Generator</h1>
+    <form method="post">
+        <input type="text" name="prompt" placeholder="Enter your art prompt" required>
+        <button type="submit">Generate</button>
+    </form>
+    {% if image_url == "error" %}
+        <p style="color:red;">Error generating image. Please try again.</p>
+    {% elif image_url %}
+        <h3>Generated Image:</h3>
+        <img src="{{ image_url }}" alt="AI Art">
+    {% endif %}
+</body>
+</html>
