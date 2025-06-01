@@ -1,0 +1,96 @@
+# app.py
+from flask import Flask, render_template, request
+import requests
+import os
+
+app = Flask(__name__)
+
+API_KEY = "your_api_key_here"  # Replace with your real API key
+API_URL = "https://api.stability.ai/v1/generate"
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    image_url = None
+    if request.method == "POST":
+        prompt = request.form["prompt"]
+        response = requests.post(API_URL, headers={"Authorization": f"Bearer {API_KEY}"}, json={"prompt": prompt})
+        if response.status_code == 200:
+            data = response.json()
+            image_url = data.get("image_url")
+        else:
+            image_url = "error"
+    return render_template("index.html", image_url=image_url)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+# templates/index.html
+'''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Art Generator</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>AI Art Generator</h1>
+    <form method="post">
+        <input type="text" name="prompt" placeholder="Enter your art prompt" required>
+        <button type="submit">Generate</button>
+    </form>
+    {% if image_url == "error" %}
+        <p style="color:red;">Error generating image. Please try again.</p>
+    {% elif image_url %}
+        <h3>Generated Image:</h3>
+        <img src="{{ image_url }}" alt="AI Art">
+    {% endif %}
+</body>
+</html>
+'''
+
+# static/styles.css
+'''
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+    background-color: #f0f0f0;
+}
+input, button {
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+img {
+    max-width: 500px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+'''
+
+# README.md
+'''
+# AI Art Generator
+
+This project generates images based on text prompts using a generative AI model.
+
+## How it works
+- Enter a text prompt (e.g., "a futuristic city at sunset").
+- The app sends the prompt to an image generation API (like Stable Diffusion).
+- The model returns an image, which is displayed on the page.
+
+## Setup
+1. Clone the repo
+2. Install dependencies: `pip install flask requests`
+3. Get an API key from Stability.ai or similar service
+4. Add your key in `app.py`
+5. Run the app: `python app.py`
+6. Open `http://127.0.0.1:5000` in your browser
+
+## Technologies
+- Python
+- Flask
+- HTML/CSS
+- Generative AI (e.g., Stable Diffusion or DALL·E)
+'''
