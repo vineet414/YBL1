@@ -1,0 +1,17 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+    background-color: #f0f0f0;
+}
+input, button {
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+img {
+    max-width: 500px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
